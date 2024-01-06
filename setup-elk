@@ -1,0 +1,40 @@
+# 도커 설치
+yum -y update
+yum install -y yum-utils
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install -y docker-ce-${version} docker-ce-cli-${version} containerd.io docker-buildx-plugin docker-compose-plugin
+systemctl start docker
+systemctl enable docker
+systemctl enable docker.service
+yum install docker-ce docker-ce-cli containerd.io
+systemctl start docker systemctl start docker
+systemctl start docker
+
+
+# elk 설치
+sudo docker pull docker.elastic.co/elasticsearch/elasticsearch:7.8.0
+sudo docker run --name elk-e -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.8.0
+
+
+sudo docker pull docker.elastic.co/kibana/kibana:7.8.0
+sudo docker run --name elk-k -d -p 5601:5601 --link elk-e:elasticsearch-custom docker.elastic.co/kibana/kibana:7.8.0
+
+docker pull docker.elastic.co/logstash/logstash:7.8.0
+docker run --name elk-l -d -p 5044:5044 --link elk-e:elasticsearch-custom docker.elastic.co/logstash/logstash:7.8.0
+
+firewall-cmd --list-all firewall-cmd --add-port=5514/udp
+firewall-cmd --reload
+
+
+
+wget https://artifacts.elastic.co/downloads/logstash/logstash-7.8.0.tar.gz
+tar xfz logstash-7.8.0.tar.gz
+
+
+java --version
+yum update
+yum list java*jdk-devel
+yum install java-1.8.0-openjdk-devel.x86_64
+vi /etc/profile
+source /etc/profile
+firewall-cmd --add-port=5514/udp
